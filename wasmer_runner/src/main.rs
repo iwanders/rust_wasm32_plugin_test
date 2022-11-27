@@ -56,7 +56,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         },
     );
 
-
     fn log_record(env: FunctionEnvMut<EnvWithMemory>, ptr: WasmPtr<u8>, len: u32) {
         println!("Pointer: {ptr:?}, len: {len}");
         let locked_memory = env.data().memory.lock().expect("klsdjflsd");
@@ -99,7 +98,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let memory = instance.exports.get_memory("memory")?.clone();
     // *std::sync::Arc::<std::sync::Mutex::<wasmer::Memory>>::get_mut(&mut my_memory).get_mut().unwrap() = std::sync::Mutex::new(memory);
     *my_memory.lock().unwrap() = memory;
-
 
     println!("points: {:?}", get_remaining_points(&mut store, &instance));
 
@@ -181,9 +179,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Test input, this does host -> guest
     {
         let prepare_input = instance.exports.get_function("prepare_input")?;
-        let prepare_input_typed: TypedFunction<u32, WasmPtr<u8>> = prepare_input.typed(&mut store)?;
-        
-        let content = [0u8, 1, 2, 3,4 ,5,6 ,7, 8];
+        let prepare_input_typed: TypedFunction<u32, WasmPtr<u8>> =
+            prepare_input.typed(&mut store)?;
+
+        let content = [0u8, 1, 2, 3, 4, 5, 6, 7, 8];
         let len = content.len() as u32;
         let res_ptr = prepare_input_typed.call(&mut store, len)?;
         // Now we have the pointer... we can write into that, somehow.
@@ -191,7 +190,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         let view = memory.view(&store);
         let mem_slice = res_ptr.slice(&view, len).unwrap();
         mem_slice.write_slice(&content);
-
 
         let use_input = instance.exports.get_function("use_input")?;
         let use_input_typed: TypedFunction<u32, ()> = use_input.typed(&mut store)?;
