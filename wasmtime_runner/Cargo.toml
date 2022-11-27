@@ -1,0 +1,13 @@
+[package]
+name = "wasmtime_runner"
+version = "0.1.0"
+edition = "2021"
+
+
+
+[dependencies.wasmtime]
+version = "3.0.0"
+default-features = false
+features = ["cranelift", "pooling-allocator"]
+
+

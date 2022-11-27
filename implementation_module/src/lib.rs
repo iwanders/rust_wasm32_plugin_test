@@ -6,6 +6,7 @@ use log::{info, warn};
 extern "C" {
     pub fn foo();
 }
+// pub fn foo() {}
 
 pub fn safe_foo() {
     unsafe { foo() };
@@ -82,6 +83,7 @@ extern "C" {
     // Send a pointer, other side inspects memory and mucks around with it.
     pub fn log_record(p: *const u8, len: u32);
 }
+// fn log_record(p: *const u8, len: u32){}
 
 use log::{Level, LevelFilter, Metadata, Record};
 static MY_LOGGER: MyLogger = MyLogger;
